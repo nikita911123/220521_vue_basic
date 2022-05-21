@@ -3,12 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>初识Vue</title>
+    <script src="../js/vue.js"></script>
 </head>
 <body>
+<!--
+    1.<div id="root">是一个容器，容器中写的不是原始HTML代码，而是Vue的模板代码
+    2.所谓的模板代码，类似于React中的jsx，是js和HTML混合体
+    3.{{xxx}}，xxx会自动读取data中的xxx属性
+    4.箭头函数 ()=>'结果'
+-->
 <!--准备好一个容器，-->
-    <div id="root"></div>
+    <div id="root">
+        <h1>hello,{{school.name.toUpperCase()}}</h1>
+        <h1>{{school.addr}}</h1>
+        <h1>{{school.subject()}}学科</h1>
+        <hr>
+
+        <h1>{{school.name,school.address}}</h1>
+<!--        return name  js底层原理 不标准表达式返回 name 逗号后面的只是重新赋值    -->
+        <h1>{{(school.name,school.address)}}</h1>
+<!--        return address  js底层原理 不标准表达式返回 address 返回最后的值-->
+        <hr>
+
+        <h1>{{school.x && school.address}}</h1>
+<!--        return address js原理 逻辑&& mdn网站讲解-->
+        <h1>{{school.name?1:2}}</h1>
+    </div>
+
     <script type="text/javascript">
-        
+        //创建一个Vue实例对象，并传入配置对象  el data 属性
+        //复习 new Vue 实例化对象 this指向  若不new 则指向window
+        const v = new Vue({
+            el:'#root', //el用于指定当前Vue实例为哪个容器服务，值是选择器字符串，选择器的写法类似于jQuery选择器 element
+            data:{ //data是存储数据的地方，为root容器提供数据，值为一个对象，相当于React中的state
+                school:{
+                    name:'bilibili',
+                    address:'bj',
+                    subject:()=>'前端' //js的箭头函数
+                }
+            }
+        })
     </script>
 </body>
 </html>
