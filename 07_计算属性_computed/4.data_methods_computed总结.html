@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>data_methods_computed</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    1.计算属性：要显示的数据不存在，需要通过计算得来
+    2.fullName函数底层用到的是对象setter和getter方法
+    3.执行的时机：
+        （1）初始显示会执行一次，得到初始值去显示
+        （2）当依赖的数据发生改变时，会被再次调用
+    4.优势：与methods实现相比，内部有缓存机制，效率更高
+    5.备注：计算属性是用于直接读取使用的，不要加()
+    -->
+<!--准备好一个容器，-->
+    <div id="root">
+        <h2>{{x}}</h2>
+        <h2>{{y()}}</h2>
+        <h2>{{z}}</h2>
+        <button @click="y">点我调用y方法</button><br><br>
+        <button @click="y()">点我调用y方法</button>
+        展示x的值：<input type="text" :value="x">
+    </div>
+    <script type="text/javascript">
+        const v = new Vue({
+            el:'#root', //指定vm为哪个容器服务
+            data:{  //驱动页面显示的数据都放在这里
+                x:100   //x最终会通过数据代理的方式放在vm身上
+            },
+            methods:{   //所有用到的函数都配置在这里
+                y(){    //y直接被放在vm身上
+                    console.log('y被调用了')
+                    return 200
+                }
+            },
+            computed:{
+                z:{ //z直接被放在vm身上
+                    set(value){ //z的值被改变时，set执行，set中的this是vm，set会收到修改的值
+                        console.log('有人修改z了，修改的值为：',value)
+                    },
+                    get(){  //z的值被读取时，或z依赖的值发生改变时，get执行，get中的this是vm，前提是：页面中要用到z
+                        console.log('get被调用了')
+                        return this.x*1 +1
+                        //监听后，无论输入的什么类型数据，都会转换成字符串；所以需要我们手动转换，字符串'52'乘以1后，字符串强制转换成数值型
+                        // '52'*1=52
+                    }
+
+                }
+            }
+        })
+    </script>
+</body>
+</html>

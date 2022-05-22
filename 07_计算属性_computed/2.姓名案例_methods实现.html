@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>姓名案例_插值语法实现</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+
+-->
+<!--准备好一个容器，-->
+    <div id="root">
+        姓：<input type="text" v-model="firstName"><br>
+        名：<input type="text" v-model="lastName"><br>
+        <!--一般来说，在Vue模板代码里面，不使用插值语法来实现这么繁琐的表达式操作-->
+        <!--插值语法里面调用方法，必须加括号；事件处理里面调用方法，可以不加括号-->
+        <!--<span>全名：{{getFullName}}</span> 页面渲染效果 function () { [native code] }-->
+        <!--页面监听到data里面的数据改变，整个el节点内重新解析，遇到函数方法，因为不知是否内部利用到data数据，所以每个函数方法都解析一遍-->
+        <span>全名：{{getFullName()}}</span>
+    </div>
+    <script type="text/javascript">
+        const v = new Vue({
+            el:'#root',
+            data:{
+                firstName:'张',
+                lastName:'三'
+            },
+            methods:{
+                getFullName(){
+                    return this.firstName +'-'+ this.lastName
+                }
+            }
+        })
+    </script>
+</body>
+</html>

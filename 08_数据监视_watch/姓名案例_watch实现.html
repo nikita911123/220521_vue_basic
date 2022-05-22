@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>姓名案例_插值语法实现</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    监听属性watch
+        1.当被监听的属性改变时，回调函数自动调用，进行相关操作
+        2.属性必须存在，才能进行监视！！
+        3.监视的两种写法
+            （1） new Vue 时传入watch配置
+            （2） 通过vm.$watch监视
+        computed和watch之间的区别
+            1.只要computed能完成的功能，watch都可以完成
+            2.watch能完成的功能，computed不一定能完成，例如：watch可以进行异步操作
+        备注：
+            1.所有被Vue所调用（管理）的函数，都不要写箭头函数-------例如：watch中的函数、computed中的函数
+            2.所有不是被Vue所调用（管理）的函数，都要写成箭头函数---例如：定时器的回调、ajax的回调等等
+            3.watch就是Vue给我们提供的一个检测数据改变的手段，至于数据发生改变后，要做什么，得看具体的业务逻辑
+                例如：
+                    需要新的值、旧的值作比较，决定接下来要干什么
+                    不要值，只要数据改变了，就要发请求等等
+-->
+<!--准备好一个容器-->
+<div id="root">
+    姓：<input type="text" v-model="firstName"><br>
+    名：<input type="text" v-model="lastName"><br>
+    <span>全名：{{fullName}}</span>
+</div>
+<script type="text/javascript">
+    const vm = new Vue({
+        el:'#root',
+        data:{
+            firstName:'张',
+            lastName:'三',
+            // fullName:'张-三',
+            fullName:''
+        },
+        watch:{
+            /*
+                1.watch中的firstName什么时候调用？firstName被改变时调用
+                2.watch中的firstName的this是谁？---vm
+            */
+            //监测姓-----精简写法
+            /*firstName(newValue,oldValue){
+                // console.log('firstName被别人改了',newValue,oldValue)
+                this.fullName = newValue +'-'+ this.lastName
+            },*/
+            //监测姓-----完整写法-----检测时，检测一个属性进行初始化就可以了，不必要多个属性一起初始化
+            /*firstName: {
+                immediate:true, //若immediate为true，则handler在初始化时，就会调用一次，以后就看firstName的改变了
+                handler(newValue,oldValue){
+                    this.fullName = newValue +'-'+ this.lastName
+                }
+            },*/
+            //监测名
+            /*lastName(newValue,oldValue){
+                // console.log('firstName被别人改了',newValue,oldValue)
+                this.fullName = this.firstName +'-'+ newValue
+            }*/
+        }
+    })
+
+    vm.$watch('firstName',{
+        immediate:true,
+        handler(newValue,oldValue){
+            this.fullName = newValue +'-'+ this.lastName
+            setTimeout(()=>{    //千万注意-定时器里面一定要写箭头函数，否则this指向会有问题哒
+                this.fullName = newValue +'-'+ this.lastName
+            },1000)
+        }
+    })
+</script>
+</body>
+</html>

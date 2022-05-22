@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>姓名案例_插值语法实现</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+
+-->
+<!--准备好一个容器，-->
+    <div id="root">
+        姓：<input type="text" v-model="firstName"><br>
+        名：<input type="text" v-model="lastName"><br>
+        <!--一般来说，在Vue模板代码里面，不使用插值语法来实现这么繁琐的表达式操作-->
+        <span>全名：{{firstName + '-' + lastName}}</span>
+    </div>
+    <script type="text/javascript">
+        const v = new Vue({
+            el:'#root',
+            data:{
+                firstName:'张',
+                lastName:'三'
+            }
+        })
+    </script>
+</body>
+</html>

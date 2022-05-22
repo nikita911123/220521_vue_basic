@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件处理</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    绑定事件
+        1.标准方式
+            v-on:click="show1()"
+        2.简写方式
+            @click="show1"
+        3.传递参数
+            @click="show2($event,666)"
+        4.阻止默认行为
+            prevent 事件修饰符
+            @click.prevent="show3"
+        5.阻止冒泡
+            stop 事件修饰符，事件修饰符可以连写，顺序可以随意改变
+            @click.stop.prevent="show4"
+        6.键盘事件
+            @keyup.enter="show5"
+            @keyup.37="show5"
+            @keyup.arrow-left="show5"
+            备注：
+                event.key 键盘的键值            enter
+                event.keyCode 键盘键值的数字代码 13
+-->
+<!--准备好一个容器，-->
+    <div id="root">
+        <h2>hello，{{school}}</h2>
+        <!--绑定事件---标准方式-->
+        <button v-on:click="show1()">点我提示：信息1（v-on绑定）</button><br><br>
+
+        <!--绑定事件---简写方式-->
+        <button @click="show1">点我提示：信息1（（@绑定）</button><br><br>
+
+        <!--绑定事件---传递参数-->
+        <button @click="show2($event,666)">点我提示：信息2 + 传递参数</button><br><br>
+
+        <!--绑定事件---阻止默认行为,prevent 事件修饰符-->
+        <a href="https://www.baidu.com" @click.prevent="show3">点我提示：信息3（（阻止默认行为）</a><br><br>
+
+        <!--绑定事件---阻止冒泡，stop 事件修饰符，事件修饰符可以连写,顺序可以随意改变-->
+        <div @click="show4">
+            <a href="https://www.baidu.com" @click.stop.prevent="show4">点我提示：信息4（（阻止冒泡）</a>
+        </div><br>
+
+        <!--键盘事件 --tab 换行，光标丢失-->
+        <!--<input @keyup.enter="show5" type="text" placeholder="按下回车提示数据"><br><br>-->
+        <!--<input @keyup.37="show5" type="text" placeholder="按下左箭头提示数据"><br><br>-->
+        <!--<<input @keyup.arrow-left="show5" type="text" placeholder="按下左箭头提示数据"><br><br>-->
+        <input @keyup.16="show5" type="text" placeholder="按下shift提示数据"><br><br>
+
+    </div>
+    <script type="text/javascript">
+        const v = new Vue({
+            el:'#root',
+            data:{ //配置数据
+                school:'bilibili'
+            },
+            methods:{ //配置方法
+                show1(event){ //此处的show1一定不要写成箭头函数，否则this就是window了
+                    //console.log(this) //this是vm
+                    //console.log('info2',event.target.innerText) //event 点击事件 默认传递
+                    alert('info1---',this)
+                },
+                show2(event,number){ //若自定义传递其他参数，则event-->$event，通过第一个形参传递
+                    console.log(event)
+                    alert('info2---'+number)
+                },
+                show3(event){
+                    // event.preventDefault() 靠程序员手动阻止默认行为
+                    alert('info3')
+                },
+                show4(event){
+                    // event.stopPropagation() //靠程序员手动阻止冒泡
+                    alert('info4')
+                },
+                show5(event){
+                    // if(event.keyCode !== 1) return //靠程序员自己判断按键
+                    console.log(event.key) //    event.key 键盘的键值            enter
+                    console.log(event.keyCode) //event.keyCode 键盘键值的数字代码 13
+                }
+            }
+        })
+    </script>
+</body>
+</html>
